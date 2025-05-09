@@ -20,7 +20,9 @@ def asaas_extract(day):
     while True:
         url = f"https://api.asaas.com/v3/financialTransactions?startDate={day}&finishDate={day}&limit=100&offset={offset}"
         response = requests.get(url, headers=headers)
+        print(response)
         data = response.json()
+        print(data)
         if len(data['data']) == 0:
             df = pd.DataFrame({'ID Asaas': [np.nan],'Valor Asaas': [np.nan],'Status Pgto': [np.nan],'Data Compensação': [np.nan], 'Estabelecimento': [np.nan] }).astype('object')
             break
