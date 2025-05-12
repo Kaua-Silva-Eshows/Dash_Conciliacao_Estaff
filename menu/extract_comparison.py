@@ -74,7 +74,7 @@ def BuildExtractComparison(transactionsExtract):
         function_format_numeric_columns(transactionsExtract, ['Valor Total', 'Valor Boleto'])
         filtered_copy, count = component_plotDataframe(transactionsExtract, 'Boletos')
         function_copy_dataframe_as_tsv(filtered_copy)
-        function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Extratos')
+        function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Boletos')
 
     st.markdown("""---""")
 
