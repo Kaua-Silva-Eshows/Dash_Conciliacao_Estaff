@@ -1,3 +1,5 @@
+import numpy as np
+import pandas as pd
 import streamlit.components.v1 as components
 import streamlit as st
 
@@ -72,3 +74,37 @@ def function_box_lenDf(len_df,df,y='', x='', box_id='', item=''):
         """,
         unsafe_allow_html=True
     )
+
+def function_format_numeric_columns(df, columns=[]):
+    for column in columns:
+        if column in df.columns:  
+            try:
+                df[column] = pd.to_numeric(df[column], errors='coerce')  
+                df[column] = df[column].apply(
+                    lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".") 
+                    if pd.notnull(x) else ''
+                )
+            except Exception:
+                continue 
+    return df
+
+def function_total_line(df, column_values, column_total):
+    if isinstance(column_values, str):
+        column_values = [column_values]
+
+    total_values = {}
+    for col in column_values:
+        df[col] = pd.to_numeric(df[col], errors='coerce')
+        total_values[col] = df[col].sum()
+
+    new_row = {col: total_values.get(col, np.nan) for col in column_values}
+    new_row[column_total] = "Total:"
+
+    for col in df.columns:
+        if col not in new_row:
+            new_row[col] = np.nan  # Use np.nan, não ""
+
+    new_row_df = pd.DataFrame([new_row])
+    df = pd.concat([df, new_row_df], ignore_index=True)
+
+    return df

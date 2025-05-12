@@ -58,7 +58,10 @@ def BuildExtractComparison(transactionsExtract):
         else:
             merged_extract['Valor Total'] = pd.to_numeric(merged_extract['Valor Total'], errors='coerce')
             filtered = merged_extract[merged_extract['Valor Asaas'] != merged_extract['Valor Total']]
-            filtered_copy, count = component_plotDataframe(filtered, 'Extratos')
+
+            filtered = function_total_line(filtered, ['Valor Asaas', 'Valor Total', 'Valor Boleto'], 'Estabelecimento')
+            function_format_numeric_columns(filtered, ['Valor Asaas', 'Valor Total', 'Valor Boleto'])
+            filtered_copy, count = component_plotDataframe(filtered, 'Diferença Assas X Boletos')
             function_copy_dataframe_as_tsv(filtered_copy)
             function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Extratos')
     
@@ -67,6 +70,8 @@ def BuildExtractComparison(transactionsExtract):
     row3 = st.columns(1)
 
     with row3[0]:
+        transactionsExtract = function_total_line(transactionsExtract, ['Valor Total', 'Valor Boleto'], 'Estabelecimento')
+        function_format_numeric_columns(transactionsExtract, ['Valor Total', 'Valor Boleto'])
         filtered_copy, count = component_plotDataframe(transactionsExtract, 'Boletos')
         function_copy_dataframe_as_tsv(filtered_copy)
         function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Extratos')
@@ -76,6 +81,8 @@ def BuildExtractComparison(transactionsExtract):
     row4 = st.columns(1)
 
     with row4[0]:
+        asaas_extract_df = function_total_line(asaas_extract_df, ['Valor Asaas'], 'ID Asaas')
+        function_format_numeric_columns(asaas_extract_df, ['Valor Asaas'])
         filtered_copy, count = component_plotDataframe(asaas_extract_df, 'Asaas Extratos')
         function_copy_dataframe_as_tsv(filtered_copy)
         function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Extratos')
