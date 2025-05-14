@@ -7,7 +7,7 @@ from menu.page import Page
 from utils.components import *
 from utils.functions import *
 
-def BuildPaymentsComparison(transactionPayments):
+def BuildPaymentsComparison(transaction_Payments):
 
     row = st.columns(6)
     global day_Payments, day_Payments2
