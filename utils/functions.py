@@ -75,18 +75,27 @@ def function_box_lenDf(len_df,df,y='', x='', box_id='', item=''):
         unsafe_allow_html=True
     )
 
-def function_format_numeric_columns(df, columns=[]):
-    for column in columns:
-        if column in df.columns:  
-            try:
-                df[column] = pd.to_numeric(df[column], errors='coerce')  
-                df[column] = df[column].apply(
-                    lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".") 
-                    if pd.notnull(x) else ''
-                )
-            except Exception:
-                continue 
-    return df
+def function_format_number_columns(df=None, columns=[], valor=None):
+    if valor is not None:
+        try:
+            valor = float(valor)
+            return f"{valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+        except (ValueError, TypeError):
+            return ""
+
+    # Formatando colunas de DataFrame
+    if df is not None and columns:
+        for column in columns:
+            if column in df.columns:
+                try:
+                    df[column] = pd.to_numeric(df[column], errors='coerce')
+                    df[column] = df[column].apply(
+                        lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+                        if pd.notnull(x) else ''
+                    )
+                except Exception:
+                    continue
+        return df
 
 def function_total_line(df, column_values, column_total):
     if isinstance(column_values, str):

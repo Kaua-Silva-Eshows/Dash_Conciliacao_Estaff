@@ -18,7 +18,7 @@ def component_fix_tab_echarts():
    </style>
     """
 
-    return st.markdown(streamlit_style, unsafe_allow_html=True)    
+    return st.markdown(streamlit_style, unsafe_allow_html=True)
 
 def component_effect_underline():
     st.markdown("""

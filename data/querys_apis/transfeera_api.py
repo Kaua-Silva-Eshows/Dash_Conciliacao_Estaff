@@ -6,8 +6,6 @@ import requests
 import os
 import zipfile
 
-from utils.functions import function_format_numeric_columns
-
 @st.cache_data
 def query_transfeera_payments(day1, day2):
     token = create_authorization().get("access_token")
@@ -103,9 +101,13 @@ def read_report():
     df["Titular"] = df["Descrição"].apply(
         lambda x: x.split('"')[1] if isinstance(x, str) and '"' in x else None)
     
-    df = df[df["Tipo"] != "Depósito"]    
-    df["Valor Transfeera"] = df["Valor"].abs()
+    df = df[(df["Tipo"] != "Depósito")]
+    df["Valor Transfeera"] = df["Valor"]
     df = df[df["Valor Transfeera"].notnull()]
+
+    df.loc[df["Tipo"] == "Estorno", "Valor Transfeera"] = df["Valor Transfeera"] / -1
+    df.loc[df["Tipo"] == "Pagamento", "Valor Transfeera"] = df["Valor Transfeera"].abs()
+
     df = df[[
         "Data Pgto", "Crédito / Débito", "Tipo", "ID do pagamento", "Valor Transfeera",
         "ID de integração", "Banco", "Agencia", "Tipo de Conta", "Conta",

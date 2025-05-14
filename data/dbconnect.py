@@ -54,4 +54,3 @@ def get_dataframe_from_query(consulta):
     if result is None or column_names is None:
         return pd.DataFrame() 
     return pd.DataFrame(result, columns=column_names)
-
