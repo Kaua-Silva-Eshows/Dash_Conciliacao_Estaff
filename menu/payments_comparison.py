@@ -28,22 +28,32 @@ def BuildPaymentsComparison(transactionPayments):
     row1 = st.columns([1,3,1])
     with row1[1]:
         merged_payments = pd.merge(transaction_Payments_group, transfeera_Payments_group, how='outer', on=['Data Pgto'])
-        function_format_numeric_columns(merged_payments, ['Valor Freela', 'Valor Transfeera'])
+        merged_payments["Diferença"] = merged_payments["Valor Freela"].astype(float) - merged_payments["Valor Transfeera"].astype(float)
+        merged_payments["Diferença"] = merged_payments["Diferença"].abs()
+        merged_payments = function_total_line(merged_payments, ['Valor Freela', 'Valor Transfeera', 'Diferença'], 'Data Pgto')        
+        function_format_numeric_columns(merged_payments, ['Valor Freela', 'Valor Transfeera', 'Diferença'])
         filtered_copy, count = component_plotDataframe(merged_payments, 'Comparação Transfeera X Propostas')
+        function_copy_dataframe_as_tsv(filtered_copy)
     
     st.markdown("""---""")
 
     row2 = st.columns(1)
     with row2[0]:
+        transaction_Payments = function_total_line(transaction_Payments, ['Valor Freela'], 'Estabelecimento')
         function_format_numeric_columns(transaction_Payments, ['Valor Freela'])
         filtered_copy, count = component_plotDataframe(transaction_Payments, 'Pagamento Propostas')
+        function_copy_dataframe_as_tsv(filtered_copy)
+        function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Propostas')
 
     st.markdown("""---""")
 
     row3 = st.columns(1)
     with row3[0]:
+        transfeera_Payments = function_total_line(transfeera_Payments, ['Valor Transfeera'], 'Crédito / Débito')
         function_format_numeric_columns(transfeera_Payments, ['Valor Transfeera'])
         filtered_copy, count = component_plotDataframe(transfeera_Payments, 'Pagamento Transfeera')
+        function_copy_dataframe_as_tsv(filtered_copy)
+        function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Pagamentos')
     
 
 class PaymentsComparison(Page):
