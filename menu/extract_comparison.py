@@ -1,6 +1,6 @@
 from datetime import date, datetime, timedelta
 import streamlit as st
-from data.queys_estaff import *
+from data.querys_estaff import *
 from data.querys_apis.assas_api import *
 from menu.page import Page
 from utils.components import *

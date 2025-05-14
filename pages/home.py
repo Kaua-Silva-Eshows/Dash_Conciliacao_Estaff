@@ -3,7 +3,6 @@ from menu.page import Page
 from menu.payments_comparison import PaymentsComparison
 from utils.components import *
 from utils.user import logout
-from data.get_data import *
 from menu.extract_comparison import ExtractComparison
 
 def render():
@@ -26,8 +25,6 @@ def render():
     col6, col7, col8, = st.columns([3.4,0.2,0.4])
     col8.button(label="Atualizar", on_click = st.cache_data.clear)
     
-    data = initialize_data(user_id)
-    # data = get_data(data) 
     tbs = st.tabs(["Validação Extrato", "Validação Pagamentos"])
     
     with tbs[0]:
