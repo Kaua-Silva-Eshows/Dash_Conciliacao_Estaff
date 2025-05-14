@@ -24,11 +24,14 @@ def BuildPaymentsComparison(transaction_Payments):
     transaction_Payments_group = transaction_Payments.groupby(['Data Pgto'])['Valor Freela'].sum().reset_index()
     transfeera_Payments_group = transfeera_Payments.groupby(['Data Pgto'])['Valor Transfeera'].sum().reset_index()
 
+    merged_payments = pd.merge(transaction_Payments_group, transfeera_Payments_group, how='outer', on=['Data Pgto'])
+    merged_payments["Diferença"] = merged_payments["Valor Freela"].astype(float) - merged_payments["Valor Transfeera"].astype(float)
+    merged_payments["Diferença"] = merged_payments["Diferença"].abs()
 
     row1 = st.columns([5,3,5])
 
     with row1[1]:
-        difference = float(transaction_Payments_group['Valor Freela'].sum()) - float(transfeera_Payments_group['Valor Transfeera'].sum())
+        difference = merged_payments["Diferença"].sum()
         difference = function_format_number_columns(valor=difference)
         tile = row1[1].container(border=True)
         tile.write(f"""<p style='text-align: center; font-size: 12px;'>Diferença Total<br><span style='font-size: 17px;'>R$: {difference}</span></p>""",unsafe_allow_html=True)
@@ -36,9 +39,6 @@ def BuildPaymentsComparison(transaction_Payments):
 
     row2 = st.columns([1,3,1])
     with row2[1]:
-        merged_payments = pd.merge(transaction_Payments_group, transfeera_Payments_group, how='outer', on=['Data Pgto'])
-        merged_payments["Diferença"] = merged_payments["Valor Freela"].astype(float) - merged_payments["Valor Transfeera"].astype(float)
-        merged_payments["Diferença"] = merged_payments["Diferença"].abs()
         merged_payments = function_total_line(merged_payments, ['Valor Freela', 'Valor Transfeera', 'Diferença'], 'Data Pgto')        
         function_format_number_columns(merged_payments, ['Valor Freela', 'Valor Transfeera', 'Diferença'])
         filtered_copy, count = component_plotDataframe(merged_payments, 'Comparação Transfeera X Propostas')
