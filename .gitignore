@@ -1,5 +1,7 @@
 # Ignore all files in the .streamlit directory
 .streamlit/*
+.apis_teste
 
 # Except for the config.toml file
 !.streamlit/config.toml
+

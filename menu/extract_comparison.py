@@ -1,7 +1,7 @@
 from datetime import date, datetime, timedelta
 import streamlit as st
 from data.queys_estaff import *
-from data.assas_api import *
+from data.querys_apis.assas_api import *
 from menu.page import Page
 from utils.components import *
 from utils.functions import *
@@ -14,7 +14,7 @@ def BuildExtractComparison(transactionsExtract):
     with row[2]:
         day_Extract = st.date_input('Selecione uma data:',value=date.today() - timedelta(days=1),format='DD/MM/YYYY',key='day_Extract')    
 
-    asaas_extract_df = asaas_extract(day_Extract)
+    asaas_extract_df = query_asaas_extract(day_Extract)
     transactionsExtract = transactions_extract(day_Extract)
     
     merged_extract = pd.merge(transactionsExtract, asaas_extract_df, how='outer', on=['ID Asaas', 'Data Compensação'])

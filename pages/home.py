@@ -1,5 +1,6 @@
 import streamlit as st
 from menu.page import Page
+from menu.payments_comparison import PaymentsComparison
 from utils.components import *
 from utils.user import logout
 from data.get_data import *
@@ -27,13 +28,13 @@ def render():
     
     data = initialize_data(user_id)
     # data = get_data(data) 
-    tbs = st.tabs(["Validação Extrato"])
+    tbs = st.tabs(["Validação Extrato", "Validação Pagamentos"])
     
     with tbs[0]:
         page = ExtractComparison()
 
-    # with tbs[1]:
-    #     page = ()
+    with tbs[1]:
+        page = PaymentsComparison()
     
     # with tbs[2]:
     #     page = ()

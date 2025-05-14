@@ -5,7 +5,7 @@ import requests
 import pandas as pd
 
 @st.cache_data
-def asaas_extract(day):
+def query_asaas_extract(day):
     offset = 0
     access_token = st.secrets["asaas_api"]["access_token"]
     
