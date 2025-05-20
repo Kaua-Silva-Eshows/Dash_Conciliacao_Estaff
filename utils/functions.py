@@ -37,7 +37,6 @@ def function_copy_dataframe_as_tsv(df):
     )
 
 def function_box_lenDf(len_df,df,y='', x='', box_id='', item=''):
-    len_df = len(df)
     st.markdown(
         """
         <style>

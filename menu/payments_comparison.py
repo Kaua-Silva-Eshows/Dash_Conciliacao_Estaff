@@ -52,7 +52,7 @@ def BuildPaymentsComparison(transaction_Payments):
         function_format_number_columns(transaction_Payments, ['Valor Freela'])
         filtered_copy, count = component_plotDataframe(transaction_Payments, 'Pagamento Propostas')
         function_copy_dataframe_as_tsv(filtered_copy)
-        function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Propostas')
+        function_box_lenDf(len_df=count - 1, df=filtered_copy, y='-100', x='500', box_id='box1', item='Propostas') #count - 1 para não pegar a linha "Total"
 
     st.markdown("""---""")
 
@@ -62,7 +62,7 @@ def BuildPaymentsComparison(transaction_Payments):
         function_format_number_columns(transfeera_Payments, ['Valor Transfeera'])
         filtered_copy, count = component_plotDataframe(transfeera_Payments, 'Pagamento Transfeera')
         function_copy_dataframe_as_tsv(filtered_copy)
-        function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Pagamentos')
+        function_box_lenDf(len_df=count - 1, df=filtered_copy, y='-100', x='500', box_id='box1', item='Pagamentos') #count - 1 para não pegar a linha "Total"
     
 
 class PaymentsComparison(Page):

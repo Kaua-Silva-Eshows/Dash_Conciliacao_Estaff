@@ -20,9 +20,7 @@ def query_asaas_extract(day):
     while True:
         url = f"https://api.asaas.com/v3/financialTransactions?startDate={day}&finishDate={day}&limit=100&offset={offset}"
         response = requests.get(url, headers=headers)
-        print(response)
         data = response.json()
-        print(data)
         if len(data['data']) == 0:
             df = pd.DataFrame({'ID Asaas': [np.nan],'Valor Asaas': [np.nan],'Status Pgto': [np.nan],'Data Compensação': [np.nan], 'Estabelecimento': [np.nan] }).astype('object')
             break
@@ -46,7 +44,7 @@ def query_asaas_extract(day):
                 break
                 
     df = df.rename(columns={'paymentId': 'ID Asaas', 'value': 'Valor Asaas', 'type': 'Status Pgto', 'date': 'Data Compensação', 'description': 'Estabelecimento'})
-    df = df[df["Status Pgto"] != "PAYMENT_FEE"]
+    df = df[~df["Status Pgto"].isin(["PAYMENT_FEE", "TRANSFER"])]
     df['Data Compensação'] = pd.to_datetime(df['Data Compensação'], errors='coerce').dt.strftime('%d/%m/%Y')        
 
     return df
@@ -67,9 +65,7 @@ def query_asaas_extract_events(day):
     while True:
         url = f"https://api.asaas.com/v3/financialTransactions?startDate={day}&finishDate={day}&limit=100&offset={offset}"
         response = requests.get(url, headers=headers)
-        print(response)
         data = response.json()
-        print(data)
         if len(data['data']) == 0:
             df = pd.DataFrame({'ID Asaas': [np.nan],'Valor Asaas': [np.nan],'Status Pgto': [np.nan],'Data Compensação': [np.nan], 'Estabelecimento': [np.nan] }).astype('object')
             break

@@ -26,7 +26,7 @@ def BuildExtractComparison(transactionsExtract, transactionsExtractEvents):
             if col_y in merged_extract_asaas.columns:
                 merged_extract_asaas[base_col] = merged_extract_asaas[col_x].combine_first(merged_extract_asaas[col_y])
                 merged_extract_asaas.drop(columns=[col_x, col_y], inplace=True)
-    merged_extract_asaas = merged_extract_asaas[['Boleto ID EPM', 'Company ID EPM', 'Estabelecimento','ID Asaas', 'Invoice Number Asaas', 'Data Compensação', 'Inicio Jobs', 'Data Vencimento','Valor Asaas','Valor Total','Valor Boleto', 'Status Pgto', 'Link', 'Data Repasse Freelas']]
+    merged_extract_asaas = merged_extract_asaas[['Boleto ID EPM', 'Company ID EPM', 'Estabelecimento', 'Brigada Fixa', 'ID Asaas', 'Invoice Number Asaas', 'Data Compensação', 'Inicio Jobs', 'Data Vencimento','Valor Asaas','Valor Total','Valor Boleto', 'Status Pgto', 'Link', 'Data Repasse Freelas']]
 
     asaas_value = float(asaasExtract_df['Valor Asaas'].sum())
     bd_value = float(transactionsExtract['Valor Total'].sum())
@@ -74,10 +74,8 @@ def BuildExtractComparison(transactionsExtract, transactionsExtractEvents):
         row2 = st.columns(1)
 
         with row2[0]:
-
-            if difference_asaas == 0:
-
-                if merged_extract_asaas.isnull().any().any():
+            if difference_asaas == "0,00":
+                if merged_extract_asaas.isna().all(axis=None):
                         st.warning('Nenhum extrato para essa data', icon="📄")
                 else:
                     st.warning('Nenhuma diferença encontrada', icon="📄")
@@ -90,38 +88,38 @@ def BuildExtractComparison(transactionsExtract, transactionsExtractEvents):
                 function_format_number_columns(filtered, ['Valor Asaas', 'Valor Total', 'Valor Boleto'])
                 filtered_copy, count = component_plotDataframe(filtered, 'Diferença Assas X Boletos')
                 function_copy_dataframe_as_tsv(filtered_copy)
-                function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Extratos')
+                function_box_lenDf(len_df=count - 1, df=filtered_copy, y='-100', x='500', box_id='box1', item='Extratos') #count - 1 para não pegar a linha "Total"
         
-        st.markdown("""---""")
+                st.markdown("""---""")
 
-        row3 = st.columns(1)
+                row3 = st.columns(1)
 
-        with row3[0]:
-            transactionsExtract = function_total_line(transactionsExtract, ['Valor Total', 'Valor Boleto'], 'Estabelecimento')
-            function_format_number_columns(transactionsExtract, ['Valor Total', 'Valor Boleto'])
-            filtered_copy, count = component_plotDataframe(transactionsExtract, 'Boletos')
-            function_copy_dataframe_as_tsv(filtered_copy)
-            function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Boletos')
+                with row3[0]:
+                    transactionsExtract = function_total_line(transactionsExtract, ['Valor Total', 'Valor Boleto'], 'Estabelecimento')
+                    function_format_number_columns(transactionsExtract, ['Valor Total', 'Valor Boleto'])
+                    filtered_copy, count = component_plotDataframe(transactionsExtract, 'Boletos')
+                    function_copy_dataframe_as_tsv(filtered_copy)
+                    function_box_lenDf(len_df=count - 1, df=filtered_copy, y='-100', x='500', box_id='box1', item='Boletos') #count - 1 para não pegar a linha "Total"
 
-        st.markdown("""---""")
+                st.markdown("""---""")
 
-        row4 = st.columns(1)
+                row4 = st.columns(1)
 
-        with row4[0]:
-            asaasExtract_df = function_total_line(asaasExtract_df, ['Valor Asaas'], 'ID Asaas')
-            function_format_number_columns(asaasExtract_df, ['Valor Asaas'])
-            filtered_copy, count = component_plotDataframe(asaasExtract_df, 'Asaas Extratos')
-            function_copy_dataframe_as_tsv(filtered_copy)
-            function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Extratos')
+                with row4[0]:
+                    asaasExtract_df = function_total_line(asaasExtract_df, ['Valor Asaas'], 'ID Asaas')
+                    function_format_number_columns(asaasExtract_df, ['Valor Asaas'])
+                    filtered_copy, count = component_plotDataframe(asaasExtract_df, 'Asaas Extratos')
+                    function_copy_dataframe_as_tsv(filtered_copy)
+                    function_box_lenDf(len_df=count - 1, df=filtered_copy, y='-100', x='500', box_id='box1', item='Extratos') #count - 1 para não pegar a linha "Total"
 
     with tabs[1]:
         row2 = st.columns(1)
 
         with row2[0]:
 
-            if difference_asaas_events == 0:
+            if difference_asaas_events == "0,00":
 
-                if merged_extract_asaas_events.isnull().any():
+                if merged_extract_asaas.isna().all(axis=None):
                         st.warning('Nenhum extrato para essa data', icon="📄")
                 else:
                     st.warning('Nenhuma diferença encontrada', icon="📄")
@@ -134,29 +132,29 @@ def BuildExtractComparison(transactionsExtract, transactionsExtractEvents):
                 function_format_number_columns(filtered, ['Valor Asaas', 'Valor Total', 'Valor Boleto'])
                 filtered_copy, count = component_plotDataframe(filtered, 'Diferença Assas Eventos X Boletos')
                 function_copy_dataframe_as_tsv(filtered_copy)
-                function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Extratos')
+                function_box_lenDf(len_df=count - 1, df=filtered_copy, y='-100', x='500', box_id='box1', item='Extratos') #count - 1 para não pegar a linha "Total"
         
-        st.markdown("""---""")
+                st.markdown("""---""")
 
-        row3 = st.columns(1)
+                row3 = st.columns(1)
 
-        with row3[0]:
-            transactionsExtractEvents = function_total_line(transactionsExtractEvents, ['Valor Total', 'Valor Boleto'], 'Estabelecimento')
-            function_format_number_columns(transactionsExtractEvents, ['Valor Total', 'Valor Boleto'])
-            filtered_copy, count = component_plotDataframe(transactionsExtractEvents, 'Boletos Eventos')
-            function_copy_dataframe_as_tsv(filtered_copy)
-            function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Boletos')
+                with row3[0]:
+                    transactionsExtractEvents = function_total_line(transactionsExtractEvents, ['Valor Total', 'Valor Boleto'], 'Estabelecimento')
+                    function_format_number_columns(transactionsExtractEvents, ['Valor Total', 'Valor Boleto'])
+                    filtered_copy, count = component_plotDataframe(transactionsExtractEvents, 'Boletos Eventos')
+                    function_copy_dataframe_as_tsv(filtered_copy)
+                    function_box_lenDf(len_df=count - 1, df=filtered_copy, y='-100', x='500', box_id='box1', item='Boletos') #count - 1 para não pegar a linha "Total"
 
-        st.markdown("""---""")
+                st.markdown("""---""")
 
-        row4 = st.columns(1)
+                row4 = st.columns(1)
 
-        with row4[0]:
-            asaasExtractEvents_df = function_total_line(asaasExtractEvents_df, ['Valor Asaas'], 'ID Asaas')
-            function_format_number_columns(asaasExtractEvents_df, ['Valor Asaas'])
-            filtered_copy, count = component_plotDataframe(asaasExtractEvents_df, 'Asaas Eventos Extratos')
-            function_copy_dataframe_as_tsv(filtered_copy)
-            function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Extratos')
+                with row4[0]:
+                    asaasExtractEvents_df = function_total_line(asaasExtractEvents_df, ['Valor Asaas'], 'ID Asaas')
+                    function_format_number_columns(asaasExtractEvents_df, ['Valor Asaas'])
+                    filtered_copy, count = component_plotDataframe(asaasExtractEvents_df, 'Asaas Eventos Extratos')
+                    function_copy_dataframe_as_tsv(filtered_copy)
+                    function_box_lenDf(len_df=count - 1, df=filtered_copy, y='-100', x='500', box_id='box1', item='Extratos') #count - 1 para não pegar a linha "Total"
         
 
 
