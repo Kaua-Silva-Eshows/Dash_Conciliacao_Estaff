@@ -64,6 +64,7 @@ def transactions_payments(day1, day2):
 SELECT
     P.ID AS 'ID Proposta',
     C.NAME AS 'Estabelecimento',
+    AU.FULL_NAME AS 'Freelas',
     DATE_FORMAT(O.START_AT, '%d/%m/%Y') AS 'Data job', 
     DATE_FORMAT(P.DATA_PAGAMENTO, '%d/%m/%Y') AS 'Data Pgto', 
     P.VALOR_FREELA AS 'Valor Freela'
